@@ -90,7 +90,9 @@ export const get = <T, K extends keyof T & string>(
   ftch: (jsonBody: string) => Promise<Response>,
 ) => {
   return pipe(
-    toJson<RepoActionType, { id: (T[K] & string) | number; columns?: K[] }>("get"),
+    toJson<RepoActionType, { id: (T[K] & string) | number; columns?: K[] }>(
+      "get",
+    ),
     ftch,
     fromJson(toObject<T>()),
   );
@@ -99,7 +101,11 @@ export const insert = <T>(ftch: (jsonBody: string) => Promise<Response>) => {
   return pipe(toJson<RepoActionType, T>("insert"), ftch, fromJson(asAny));
 };
 export const update = <T>(ftch: (jsonBody: string) => Promise<Response>) => {
-  return pipe(toJson<RepoActionType, Partial<T>>("update"), ftch, fromJson(asAny));
+  return pipe(
+    toJson<RepoActionType, Partial<T>>("update"),
+    ftch,
+    fromJson(asAny),
+  );
 };
 export const set = <T>(ftch: (jsonBody: string) => Promise<Response>) => {
   return pipe(toJson<RepoActionType, T>("set"), ftch, fromJson(asAny));
@@ -113,15 +119,18 @@ export const remove = <T, K extends keyof T & string>(
     fromJson(asAny),
   );
 };
-export type FetchLike = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
+export type FetchLike = (
+  input: RequestInfo,
+  init?: RequestInit,
+) => Promise<Response>;
 export type Send = (json: string) => Promise<Response>;
 
 const globalFetch = (): FetchLike | undefined =>
-  (typeof global !== "undefined"
+  typeof global !== "undefined"
     ? (global as any).fetch
     : typeof window !== "undefined"
-      ? window.fetch
-      : undefined);
+    ? window.fetch
+    : undefined;
 
 /** */
 export const mkSend = (
@@ -138,7 +147,7 @@ export const mkSend = (
 const clientFty = <T, K extends keyof T & string>(
   url: RequestInfo,
   requestBase?: RequestInit,
-  fetch?: FetchLike
+  fetch?: FetchLike,
 ) => {
   const send = mkSend(url, requestBase, fetch);
   return {

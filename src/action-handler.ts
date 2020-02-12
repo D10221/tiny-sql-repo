@@ -5,7 +5,8 @@ import { Connection } from "tedious";
 const execAction = <T, K extends keyof T & string>(
   repo: Repo<T, K>,
   action: RepoActionType,
-  payload: any): ((connection: Connection) => Promise<any>) => {
+  payload: any,
+): ((connection: Connection) => Promise<any>) => {
   //
   switch (action) {
     case "count": {
@@ -43,20 +44,32 @@ const execAction = <T, K extends keyof T & string>(
   }
 };
 
-export type ActionRequest = { type: RepoActionType; payload: any, meta: Object  };
+export type ActionRequest = {
+  type: RepoActionType;
+  payload: any;
+  meta: Object;
+};
 
-export type Connect = (req: Request, meta: {}) => Connection | Promise<Connection>;
+export type Connect = (
+  req: Request,
+  meta: {},
+) => Connection | Promise<Connection>;
 
-const actionHandler = <T, K extends keyof T & string>(repo: Repo<T, K>, connect: Connect): RequestHandler => {
+const actionHandler = <T, K extends keyof T & string>(
+  repo: Repo<T, K>,
+  connect: Connect,
+): RequestHandler => {
   return async (req, res, next) => {
     try {
       const { type: action, payload, meta } = req.body as ActionRequest;
       if (typeof action !== "string") throw new Error("action required");
-      
-      res.json(await execAction(repo, action, payload)(await connect(req, meta)));
+
+      res.json(
+        await execAction(repo, action, payload)(await connect(req, meta)),
+      );
     } catch (error) {
       next(error);
     }
   };
-}
+};
 export default actionHandler;

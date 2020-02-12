@@ -1,10 +1,10 @@
 import { json, Router } from "express";
 import ActionHandler, { Connect } from "./action-handler";
-import Repo from "./repo"
+import Repo from "./repo";
 /** */
 const router = (
   tables: { tableName: string; pkey: string; pkeyAuto?: boolean }[],
-  connect: Connect
+  connect: Connect,
 ) => {
   const router = Router();
   for (const table of tables) {

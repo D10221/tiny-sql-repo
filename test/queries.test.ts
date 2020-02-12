@@ -66,10 +66,11 @@ describe("sql-queries", () => {
     const data = { id: 0, value: "0" };
     const txt = set(data);
     expect(clean(txt)).toBe(
-      "IF(EXISTS(SELECT [id] FROM [testtable] WHERE [id]=@id)) " + 
-      "UPDATE [testtable] SET [value]=@value "+
-      "WHERE [id] = @id "+
-      "ELSE INSERT INTO [testtable] ([value]) VALUES (@value);"+
-      "SELECT @@IDENTITY as [id]");
+      "IF(EXISTS(SELECT [id] FROM [testtable] WHERE [id]=@id)) " +
+        "UPDATE [testtable] SET [value]=@value " +
+        "WHERE [id] = @id " +
+        "ELSE INSERT INTO [testtable] ([value]) VALUES (@value);" +
+        "SELECT @@IDENTITY as [id]",
+    );
   });
 });

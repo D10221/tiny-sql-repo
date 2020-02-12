@@ -10,22 +10,35 @@ const firstValue = <T, R>(f: (x: T) => R) => (x: any) => f(x[0]);
 
 export type Repo<T, K extends keyof T & string> = {
   get: (id: T[K], keys?: (keyof T)[]) => (v: Connection) => Promise<T>;
-  set: (data: T) => (connection: Connection) => Promise<Result<{ [key in K]: T[K]; }>>;
-  find: (filter: string, params?: {} | undefined, columns?: (keyof T)[], take?: number, skip?: number, desc?: boolean) => (v: Connection) => Promise<T[]>;
-  update: (data: Partial<T> & { [key in K]: T[K]; }) => (connection: Connection) => Promise<Result<T>>;
-  insert: (data: T) => (connection: Connection) => Promise<Result<{ [key in K]: T[K]; }>>;
+  set: (
+    data: T,
+  ) => (connection: Connection) => Promise<Result<{ [key in K]: T[K] }>>;
+  find: (
+    filter: string,
+    params?: {} | undefined,
+    columns?: (keyof T)[],
+    take?: number,
+    skip?: number,
+    desc?: boolean,
+  ) => (v: Connection) => Promise<T[]>;
+  update: (
+    data: Partial<T> & { [key in K]: T[K] },
+  ) => (connection: Connection) => Promise<Result<T>>;
+  insert: (
+    data: T,
+  ) => (connection: Connection) => Promise<Result<{ [key in K]: T[K] }>>;
   remove: (id: T[K]) => (connection: Connection) => Promise<Result<any>>;
   count: (filter?: string | undefined) => (v: Connection) => Promise<number>;
   exists: (filter?: string | undefined) => (v: Connection) => Promise<boolean>;
-}
+};
 
-export type RepoActionType = keyof Repo<any,any>;
+export type RepoActionType = keyof Repo<any, any>;
 
 export type RepoFty<T, K extends keyof T & string> = (options: {
   tableName: string;
   pkey: K;
   pkeyAuto?: boolean | undefined;
-}) => Repo<T,K>
+}) => Repo<T, K>;
 
 /** */
 const tinyRepo = <T, K extends keyof T & string>(options: {

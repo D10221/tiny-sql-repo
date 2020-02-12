@@ -4,7 +4,6 @@ import Repo, { RepoActionType } from "./repo";
 import { Action, CHANNEL } from "./ipc-types";
 /** */
 export default function subscribe() {
-
   const handler = async (_event: any, action: Action) => {
     try {
       const { type, payload, meta } = action;
@@ -13,7 +12,9 @@ export default function subscribe() {
       if (!from) throw new Error("from: 'tableName' required");
 
       const repo = Repo<any, any>({
-        pkey, tableName: from, pkeyAuto: Boolean(pkeyAuto),
+        pkey,
+        tableName: from,
+        pkeyAuto: Boolean(pkeyAuto),
       });
 
       const execAction = (actionType: RepoActionType) => {
@@ -55,12 +56,16 @@ export default function subscribe() {
       const connect = () => Connect(config.from(use || "DB"));
       return using(connect)(execAction(type));
     } catch (error) {
-      return { error: true, message: error.message, stack: (error as Error).stack };
+      return {
+        error: true,
+        message: error.message,
+        stack: (error as Error).stack,
+      };
     }
-  }
+  };
   ipcMain.handle(CHANNEL, handler);
-  
+
   return function unsubscribe() {
     ipcMain.removeHandler(CHANNEL);
-  }
+  };
 }
