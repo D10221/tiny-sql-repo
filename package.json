@@ -1,0 +1,37 @@
+{
+  "name": "@d10221/tiny-sql-repo",
+  "version": "0.1.0.alpha.1",
+  "main": "index.js",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "src": "src/index.ts",
+  "author": "Mr D.",
+  "license": "MIT",
+  "scripts": {
+    "build:cjs": "rimraf dist/cjs && tsc -p ./tsconfig.json",
+    "build:mjs": "rimraf dist/mjs && tsc -p ./tsconfig.mjs.json",
+    "build": "rimraf dist && yarn build:cjs && yarn build:mjs",
+    "watch": "rimraf dist && tsc -p . --watch",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/express": "4.17.2",
+    "@types/jest": "25.1.2",
+    "@types/tedious": "4.0.0",
+    "express": "4.17.1",
+    "jest": "25.1.0",
+    "ts-jest": "25.2.0",
+    "ts-node": "8.6.2",
+    "typescript": "3.7.5"
+  },
+  "dependencies": {
+    "@d10221/tiny-sql": "1.0.0-beta.28"
+  },
+  "peerDependencies": {
+    "tedious": "8.0.1"
+  },
+  "files": [
+    "src/",
+    "dist/"
+  ]
+}

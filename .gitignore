@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+.vscode/
+.ionide/
+*.tgz
+*.tar.gz
+*.zip
+*.local
+*.lock
+*.log
