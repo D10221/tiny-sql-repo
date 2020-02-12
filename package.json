@@ -40,6 +40,9 @@
   },
   "files": [
     "src/",
-    "dist/"
+    "dist/",
+    "index.js",
+    "index.mjs",
+    "index.d.ts"
   ]
 }
