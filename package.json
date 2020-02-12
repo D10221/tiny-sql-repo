@@ -5,7 +5,7 @@
   "module": "index.mjs",
   "types": "index.d.ts",
   "src": "src/index.ts",
-  "author": "Mr D.",
+  "author": "d10221@protonmail.com",
   "license": "MIT",
   "scripts": {
     "build:cjs": "rimraf dist/cjs && tsc -p ./tsconfig.json",
