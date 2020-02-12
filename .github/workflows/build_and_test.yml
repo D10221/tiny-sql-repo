@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2    
-    - name: build & test
+    - name: install and build and test
       run: |
         yarn,
         yarn build,
