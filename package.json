@@ -16,7 +16,7 @@
     "watch": "rimraf dist && tsc -p . --watch",
     "test": "jest",
     "prepack": "yarn build && yarn test && yarn pretty",
-    "postpack": "release-it --no-npm",
+    "postpack": "release-it",
     "pretty": "prettier src**/*.*  test/**/* *.json *.js *.md --write"
   },
   "devDependencies": {
