@@ -1,6 +1,6 @@
 {
   "name": "@d10221/tiny-sql-repo",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "main": "index.js",
   "module": "index.mjs",
   "types": "index.d.ts",
@@ -33,7 +33,7 @@
     "typescript": "3.7.5"
   },
   "dependencies": {
-    "@d10221/tiny-sql": "1.0.0-beta.28"
+    "@d10221/tiny-sql": "1.0.0-beta.29"
   },
   "peerDependencies": {
     "tedious": "8.0.1"
