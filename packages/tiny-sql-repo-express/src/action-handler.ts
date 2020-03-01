@@ -1,4 +1,4 @@
-import { Repo, RepoActionType } from "./repo";
+import { Repo, RepoActionType } from "@d10221/tiny-sql-repo";
 import { RequestHandler, Request } from "express";
 import { Connection } from "tedious";
 

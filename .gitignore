@@ -1,8 +1,8 @@
-node_modules/
-dist/
-build/
-.vscode/
-.ionide/
+**/node_modules/*
+**/dist/*
+**/build/*
+**/.vscode/*
+**/.ionide/*
 *.tgz
 *.tar.gz
 *.zip

@@ -1,6 +1,6 @@
 import curry from "./curry";
 import pipe from "./pipe";
-import { RepoActionType } from "./repo";
+import { RepoActionType } from "@d10221/tiny-sql-repo";
 
 const toJson = curry(<A, P>(actionType: A, payload: P) => {
   return JSON.stringify({ type: actionType, payload });

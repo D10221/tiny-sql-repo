@@ -1,6 +1,6 @@
 import { json, Router } from "express";
 import ActionHandler, { Connect } from "./action-handler";
-import Repo from "./repo";
+import { repo as Repo } from "@d10221/tiny-sql-repo";
 /** */
 const router = (
   tables: { tableName: string; pkey: string; pkeyAuto?: boolean }[],
