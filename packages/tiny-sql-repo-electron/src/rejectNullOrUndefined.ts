@@ -1,7 +1,7 @@
 export class NUllOrUndefinedError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "NUllOrUndefinedError"
+    this.name = "NUllOrUndefinedError";
   }
 }
 function isNulOrUndefined(x: any): x is null | undefined {
