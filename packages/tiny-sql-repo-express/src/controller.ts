@@ -10,7 +10,11 @@ const router = (
   for (const table of tables) {
     const { tableName } = table;
     const repo = tinyRepo<any, any>(table);
-    router.post(`/${tableName}`, json(), ActionHandler<any, any>(repo as any, connect));
+    router.post(
+      `/${tableName}`,
+      json(),
+      ActionHandler<any, any>(repo as any, connect),
+    );
   }
   return router;
 };

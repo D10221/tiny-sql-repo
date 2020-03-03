@@ -1,15 +1,29 @@
-import { Invoker } from "./types";
 import { invoke } from "./invoke";
-type InvokerConfig<T> = {
+import { ExecFindOptions } from "@d10221/tiny-sql-repo";
+import { rejectNullOrUndefined } from "./rejectNullOrUndefined";
+
+export type Invoker<T, K extends keyof T & string> = {
+  pkey: K;
+  get: (id: T[K], keys?: (keyof T)[]) => Promise<T>;
+  set: (data: T) => Promise<any>;
+  find: (payload: ExecFindOptions<T>) => Promise<T[]>;
+  update: (data: Partial<T> & { [key in K]: T[K] }) => Promise<any>;
+  insert: (data: T) => Promise<any>;
+  remove: (id: T[K]) => Promise<any>;
+  count: (filter?: string | undefined) => Promise<number>;
+  exists: (filter?: string | undefined) => Promise<boolean>;
+};
+export type InvokerConfig<T, K extends keyof T & string> = {
   name: string;
-  pkey: keyof T & string;
+  pkey: K;
   pkeyAuto?: boolean;
 };
 export const invoker = <T, K extends keyof T & string>(
-  config: InvokerConfig<T>,
+  config: InvokerConfig<T, K>,
 ) => (dbName: string): Invoker<T, K> => {
   const { name, pkey, pkeyAuto } = config;
   return {
+    pkey,
     get: (id, columns) =>
       invoke({
         type: "get",
@@ -19,7 +33,7 @@ export const invoker = <T, K extends keyof T & string>(
     set: (payload: T) =>
       invoke({
         type: "set",
-        payload,
+        payload: rejectNullOrUndefined(payload),
         meta: { use: dbName, from: name, pkey, pkeyAuto },
       }),
     find: payload =>
@@ -31,13 +45,13 @@ export const invoker = <T, K extends keyof T & string>(
     update: (payload: Partial<T> & { [key in K]: T[K] }) =>
       invoke({
         type: "update",
-        payload,
+        payload: rejectNullOrUndefined(payload),
         meta: { use: dbName, from: name, pkey, pkeyAuto },
       }),
     insert: (payload: T) =>
       invoke({
         type: "insert",
-        payload,
+        payload: rejectNullOrUndefined(payload),
         meta: { use: dbName, from: name, pkey, pkeyAuto },
       }),
     remove: (id: T[K]) =>

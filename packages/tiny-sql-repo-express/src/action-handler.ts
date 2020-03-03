@@ -17,7 +17,7 @@ const execAction = <T, K extends keyof T & string>(
       const { filter } = payload;
       return repo.exists(filter);
     }
-    case "find": {      
+    case "find": {
       return repo.find(payload);
     }
     case "get": {

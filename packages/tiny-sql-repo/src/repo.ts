@@ -9,6 +9,7 @@ const first = <X>(values: X[]) => values[0];
 const firstValue = <T, R>(f: (x: T) => R) => (x: any) => f(x[0]);
 
 export type Repo<T, K extends keyof T & string> = {
+  pkey: K;
   get: (id: T[K], keys?: (keyof T)[]) => (v: Connection) => Promise<T>;
   set: (
     data: T,
@@ -126,6 +127,7 @@ export const tinyRepo = <T, K extends keyof T & string>(options: {
     );
 
   return {
+    pkey,
     get: execGet,
     set: execSet,
     find: execFind,

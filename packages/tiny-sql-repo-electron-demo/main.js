@@ -45,9 +45,8 @@ async function onReady() {
         webPreferences: {
             nodeIntegration: true
         }
-    })
+    })    
     function onReadyToShow() {
-        win.webContents.openDevTools();
         win.show();
     }
     function onWindowClosed() {
@@ -56,6 +55,7 @@ async function onReady() {
     win.on("close", onWindowClosed)
     win.on("ready-to-show", onReadyToShow);
     win.loadFile(join(__dirname, "index.html"));
+    win.webContents.openDevTools();
 }
 
 app.on("ready", onReady);

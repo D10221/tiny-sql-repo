@@ -1,6 +1,6 @@
 {
   "name": "@d10221/tiny-sql-repo",
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0-alpha.5",
   "main": "dist/cjs/index.js",
   "module": "dist/esnext/index.js",
   "types": "dist/esnext/index.d.ts",
