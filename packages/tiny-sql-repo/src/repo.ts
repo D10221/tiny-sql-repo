@@ -1,6 +1,6 @@
 import pipe from "./pipe";
 import { execSql, Result } from "@d10221/tiny-sql";
-import queries from "./queries";
+import queries, { FindOptions, OrderByOptions, PagedOptions } from "./queries";
 import { Connection } from "tedious";
 
 const then = <X, R>(f: (x: X) => R) => (p: Promise<X>) => p.then(f);
@@ -39,15 +39,18 @@ export type RepoFty<T, K extends keyof T & string> = (options: {
   pkey: K;
   pkeyAuto?: boolean | undefined;
 }) => Repo<T, K>;
-
+/** new */
+export type ExecFindOptions<T> = FindOptions<T> & OrderByOptions<T> & PagedOptions & {
+  params?: {}
+}
 /** */
-const tinyRepo = <T, K extends keyof T & string>(options: {
+export const tinyRepo = <T, K extends keyof T & string>(options: {
   tableName: string;
   pkey: K;
   pkeyAuto?: boolean;
 }) => {
   const { pkey } = options;
-  type Key = keyof T;
+  type Key = keyof T & string;
   type Identity = { [key in K]: T[K] };
   const {
     get,
@@ -71,18 +74,13 @@ const tinyRepo = <T, K extends keyof T & string>(options: {
   const execSet = (data: T) =>
     execSql<Identity>(set(data), { ...data, id: data[pkey] });
 
-  const execFind = (
-    filter: string,
-    params?: {},
-    columns: Key[] = [],
-    take = 0,
-    skip = 0,
-    desc = true,
-  ) =>
-    pipe(
-      execSql<T>(paged(find(filter, columns), take, skip, desc), params),
+  const execFind = (execFindOptions: ExecFindOptions<T>) => {
+    const { filter, columns, searchText, searchColumns, take, skip, orderBy, orderByDesc, params } = execFindOptions;
+    return pipe(
+      execSql<T>(paged(find({ filter, columns, searchText, searchColumns }), { take, skip, orderBy, orderByDesc }), params),
       then(values),
     );
+  }
 
   const execUpdate = (data: Partial<T> & Identity) =>
     execSql<T>(update(data), { ...data, id: data[pkey] });
@@ -118,4 +116,4 @@ const tinyRepo = <T, K extends keyof T & string>(options: {
     exists: execExists,
   };
 };
-export default tinyRepo;
+

@@ -71,10 +71,12 @@ export function subscribe(connectToName: (name: string) => Promise<Connection>) 
             return using(connect)(execAction(type));
         }
         catch (error) {
+            // serializable
             return {
                 error: true,
                 message: error.message,
                 stack: (error as Error).stack,
+                name: error.name || "Error"
             };
         }
     };

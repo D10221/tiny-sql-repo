@@ -1,27 +1,18 @@
-import { repo } from "../src";
+import { tinyRepo } from "../src";
 import { execSql, connect } from "@d10221/tiny-sql";
 import { Connection } from "tedious";
-import { randomBytes } from "crypto";
-
-const randomString = (length = 16, enc = "hex") =>
-  randomBytes(length).toString(enc);
+import { randomString, rangeFrom } from "./util";
 
 type TestTable = {
   id: number;
   value: string;
 };
+
 type Kv = {
   key: string;
   value: string;
 };
-function* range(from: number, to: number) {
-  while (from <= to) {
-    yield from++;
-  }
-}
-function rangeFrom(from: number, to: number) {
-  return Array.from(range(from, to));
-}
+
 describe("tiny-repo", () => {
   let connection: Connection;
   beforeAll(async () => {
@@ -66,7 +57,7 @@ describe("tiny-repo", () => {
     connection.close();
   });
 
-  const { find, get, insert, remove, set, update, count, exists } = repo<
+  const { find, get, insert, remove, set, update, count, exists } = tinyRepo<
     TestTable,
     "id"
   >({
@@ -75,7 +66,7 @@ describe("tiny-repo", () => {
     pkeyAuto: true,
   });
 
-  const kv = repo<Kv, "key">({ pkey: "key", tableName: "KV" });
+  const kv = tinyRepo<Kv, "key">({ pkey: "key", tableName: "KV" });
 
   it("get nothing", async () => {
     const value = await get(101)(connection);
@@ -89,75 +80,9 @@ describe("tiny-repo", () => {
     const value = await get(1, ["value"])(connection);
     expect(value).toMatchObject({ value: "index-1" });
   });
-  it("finds all", async () => {
-    const values = await find("1=1")(connection);
-    expect(values.length).toBe(100);
-  });
-  it("finds some", async () => {
-    const values = await find("id in (1,2,3)")(connection);
-    expect(values.length).toBe(3);
-  });
-  it("finds nothing", async () => {
-    const { values } = await find("id > 100")(connection);
-    expect(values.length).toBe(0);
-  });
-  it("finds selects keys", async () => {
-    let params: any = undefined;
-    const values = await find("id = 100", params, ["value"])(connection);
-    expect(values[0]).toMatchObject({ value: "index-100" });
-  });
-  it("finds limit 1", async () => {
-    let params: any = undefined;
-    const keys: any[] = []; // select *
-    const values = await find("1=1", params, keys, 1)(connection);
-    expect(values.length).toBe(1);
-  });
-  it("finds over limit", async () => {
-    const limit = 1000;
-    let params: any = undefined;
-    const keys: any[] = []; // select *
-    const values = await find("1=1", params, keys, limit)(connection);
-    expect(values.length).toBe(100);
-  });
-  it("finds ordering by desc", async () => {
-    const limit = 1000;
-    let params: any = undefined;
-    const keys: any[] = ["id"]; // select *
-    const all = "1=1"; // Not filter
-    const desc = true;
-    const skip = 0;
-    const values = await find(all, params, keys, limit, skip, desc)(connection);
-    expect(values[0]).toMatchObject({ id: 100 });
-  });
-  it("finds ordering by asc", async () => {
-    const limit = 1000;
-    let params: any = undefined;
-    const keys: any[] = ["id"]; // select *
-    const all = "1=1"; // Not filter
-    const desc = false;
-    const skip = 0;
-    const values = await find(all, params, keys, limit, skip, desc)(connection);
-    expect(values[0]).toMatchObject({ id: 1 });
-  });
-  it("finds [11...20]", async () => {
-    const values = await find(
-      "1=1", // filter
-      undefined, // params
-      [], //
-      10,
-      10,
-      false,
-    )(connection);
-    expect(values.map(x => x.id)).toMatchObject(rangeFrom(11, 20));
-  });
-  it("finds [90...81]", async () => {
-    // take 10 skip 10 order by desc
-    const values = await find("1=1", undefined, [], 10, 10, true)(connection);
-    expect(values.map(x => x.id)).toMatchObject(rangeFrom(81, 90).reverse());
-  });
   it("updates", async () => {
     await update({ id: 1, value: "x-1" })(connection);
-    const values = await find(" id=1")(connection);
+    const values = await find({ filter: " id=1" })(connection);
     expect(values.length).toBe(1);
     expect(values[0]).toMatchObject({ id: 1, value: "x-1" });
   });
@@ -217,7 +142,7 @@ describe("tiny-repo", () => {
     type RandomTable = {
       id: number;
     };
-    const randomRepo = repo<RandomTable, "id">({
+    const randomRepo = tinyRepo<RandomTable, "id">({
       pkey: "id",
       tableName: randomtable,
       pkeyAuto: true,

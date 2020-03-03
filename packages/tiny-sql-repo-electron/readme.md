@@ -1,6 +1,6 @@
-tiny-sql-repo: (wip)
+@d10221:tiny-sql/repo/electron (wip)
 
-All-in-one Quick crud/repository mssql access
+crud mssql access over ipc
 
 - sql-backend
 - sql-backend request handler

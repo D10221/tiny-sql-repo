@@ -1,3 +1,3 @@
-export { default as repo, Repo, RepoActionType } from "./repo";
-export { default as queries } from "./queries";
+export * from "./repo";
+export { default as queries, FindOptions } from "./queries";
 
