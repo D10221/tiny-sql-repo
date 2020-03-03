@@ -1,18 +1,18 @@
 import { using } from "@d10221/tiny-sql";
 import { ipcMain } from "electron";
-import { repo as Repo, RepoActionType } from "@d10221/tiny-sql-repo";
+import { tinyRepo, RepoActionType } from "@d10221/tiny-sql-repo";
 import { Action, CHANNEL } from "./types";
 import { Connection } from "tedious";
 /** */
-export function subscribe(connectToName: (name: string) => Promise<Connection>) {
+export function ipc(connectToName: (name: string) => Promise<Connection>) {
     const handler = async (_event: any, action: Action) => {
         try {
             const { type, payload, meta } = action;
             const { use, from, pkey, pkeyAuto } = meta;
-            if(!use) throw new Error("use: 'dbName', required")
+            if (!use) throw new Error("use: 'dbName', required")
             if (!from)
                 throw new Error("from: 'tableName' required");
-            const repo = Repo<any, any>({
+            const repo = tinyRepo<any, any>({
                 pkey,
                 tableName: from,
                 pkeyAuto: Boolean(pkeyAuto),
@@ -28,22 +28,7 @@ export function subscribe(connectToName: (name: string) => Promise<Connection>) 
                         return repo.exists(filter);
                     }
                     case "find": {
-                        const {
-                            filter, 
-                            params,
-                            columns, 
-                            take, 
-                            skip, 
-                            desc
-                        } = payload;
-                        return repo.find(
-                            filter, 
-                            params,
-                            columns, 
-                            take, 
-                            skip, 
-                            desc
-                        );
+                        return repo.find(payload);
                     }
                     case "get": {
                         const { id, columns } = payload;

@@ -1,10 +1,12 @@
 import { Invoker } from "./types";
 import { invoke } from "./invoke";
-export const invoker = <T, K extends keyof T & string>(
+type InvokerConfig<T> = {
   name: string,
-  pkey: K,
-  pkeyAuto = false,
-) => (dbName: string): Invoker<T, K> => {
+  pkey: keyof T & string,
+  pkeyAuto?: boolean
+}
+export const invoker = <T, K extends keyof T & string>(config: InvokerConfig<T>) => (dbName: string): Invoker<T, K> => {
+  const { name, pkey, pkeyAuto } = config;
   return {
     get: (id, columns) =>
       invoke({
@@ -18,14 +20,7 @@ export const invoker = <T, K extends keyof T & string>(
         payload,
         meta: { use: dbName, from: name, pkey, pkeyAuto },
       }),
-    find: (payload: {
-      filter: string;
-      params?: {} | undefined;
-      columns?: (keyof T)[];
-      take?: number;
-      skip?: number;
-      desc?: boolean;
-    }) =>
+    find: (payload) =>
       invoke({
         type: "find",
         payload,

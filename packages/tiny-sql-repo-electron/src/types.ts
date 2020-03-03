@@ -1,4 +1,4 @@
-import { RepoActionType } from "@d10221/tiny-sql-repo";
+import { RepoActionType, ExecFindOptions } from "@d10221/tiny-sql-repo";
 
 export { RepoActionType }
 
@@ -18,14 +18,7 @@ export type Action = {
 export type Invoker<T, K extends keyof T & string> = {
   get: (id: T[K], keys?: (keyof T)[]) => Promise<T>;
   set: (data: T) => Promise<any>;
-  find: (payload: {
-    filter: string;
-    params?: {} | undefined;
-    columns?: (keyof T)[];
-    take?: number;
-    skip?: number;
-    desc?: boolean;
-  }) => Promise<T[]>;
+  find: (payload: ExecFindOptions<T>) => Promise<T[]>;
   update: (data: Partial<T> & { [key in K]: T[K] }) => Promise<any>;
   insert: (data: T) => Promise<any>;
   remove: (id: T[K]) => Promise<any>;

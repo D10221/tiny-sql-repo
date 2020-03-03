@@ -3,6 +3,8 @@ module.exports = {
   globals: {
     "ts-jest": {
       tsConfig: "tsconfig.test.json",
-    },
+    },    
   },
+  runner: '@jest-runner/electron/main',
+  testEnvironment: 'node'
 };
