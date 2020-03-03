@@ -7,7 +7,17 @@ function clean(x: string) {
   return x.trim().replace(/(\s|\r|\n|\t)+/g, " ");
 }
 describe("sql-queries", () => {
-  const { insert, count, exists, set, update, find, get, paged, remove } = queries<TestTable, "id">({
+  const {
+    insert,
+    count,
+    exists,
+    set,
+    update,
+    find,
+    get,
+    paged,
+    remove,
+  } = queries<TestTable, "id">({
     pkey: "id",
     tableName: "testtable",
     pkeyAuto: true,
@@ -67,25 +77,25 @@ describe("sql-queries", () => {
     const txt = set(data);
     expect(clean(txt)).toBe(
       "IF(EXISTS(SELECT [id] FROM [testtable] WHERE [id]=@id)) " +
-      "UPDATE [testtable] SET [value]=@value " +
-      "WHERE [id] = @id " +
-      "ELSE INSERT INTO [testtable] ([value]) VALUES (@value);" +
-      "SELECT @@IDENTITY as [id]",
+        "UPDATE [testtable] SET [value]=@value " +
+        "WHERE [id] = @id " +
+        "ELSE INSERT INTO [testtable] ([value]) VALUES (@value);" +
+        "SELECT @@IDENTITY as [id]",
     );
   });
   it("TODO: find", () => {
     expect(find).toBeInstanceOf(Function);
-  })
+  });
   it("TODO get", () => {
     expect(get).toBeInstanceOf(Function);
-  })
+  });
   it("TODO paged", () => {
     expect(paged).toBeInstanceOf(Function);
-  })
+  });
   it("TODO remove", () => {
     expect(remove).toBeInstanceOf(Function);
-  })
+  });
   it("TODO update", () => {
     expect(update).toBeInstanceOf(Function);
-  })
+  });
 });

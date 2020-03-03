@@ -1,19 +1,19 @@
 import { debugQueries } from "./debug-queries";
 
 export type FindOptions<T> = {
-  filter: string,
-  columns?: (keyof T & string)[],
-  searchText?: string,
-  searchColumns?: (keyof T & string)[]
-}
+  filter: string;
+  columns?: (keyof T & string)[];
+  searchText?: string;
+  searchColumns?: (keyof T & string)[];
+};
 export type OrderByOptions<T> = {
-  orderBy?: keyof T,
-  orderByDesc?: boolean,
-}
+  orderBy?: keyof T;
+  orderByDesc?: boolean;
+};
 export type PagedOptions = {
   take?: number;
   skip?: number;
-}
+};
 function $keys<X>(x: X) {
   return Object.keys(x) as (keyof X)[];
 }
@@ -55,10 +55,10 @@ const queries = <T, K extends keyof T & string>(options: {
   const selectKeys = (cols: Key[]) =>
     cols && cols.length ? cols.map(quote("[", "]")).join(", ") : "*";
 
-  const from = (tableName: string, select: string) => `${select} FROM [${tableName}]`;
+  const from = (tableName: string, select: string) =>
+    `${select} FROM [${tableName}]`;
 
-  const select = (...cols: Key[]) =>
-    `SELECT ${selectKeys(cols)} `;
+  const select = (...cols: Key[]) => `SELECT ${selectKeys(cols)} `;
 
   const get = (columns: Key[]) =>
     `${from(tableName, select(...columns))} ${where(`[${pkey}] = @id`)}`;
@@ -71,19 +71,27 @@ const queries = <T, K extends keyof T & string>(options: {
         return "";
     }
   };
-  const search = (searchColumns: (keyof T & string)[], searchText?: string | undefined) => {
-    return (searchColumns.map(c => `[${c}] LIKE '%${searchText || ""}%'`)
-      .join(" OR "));
-  }
+  const search = (
+    searchColumns: (keyof T & string)[],
+    searchText?: string | undefined,
+  ) => {
+    return searchColumns
+      .map(c => `[${c}] LIKE '%${searchText || ""}%'`)
+      .join(" OR ");
+  };
   const applySearch = (o: FindOptions<T>) => {
     const { filter, columns, searchText, searchColumns } = o;
     if (!searchText) return filter;
-    return [filter, search(searchColumns || columns || [], searchText)].join(" AND ")
-  }
+    return [filter, search(searchColumns || columns || [], searchText)].join(
+      " AND ",
+    );
+  };
   const find = (findOptions: FindOptions<T>) => {
     const { columns } = findOptions;
-    return `${from(tableName, select(...(columns || [])))} ${where(applySearch(findOptions))}`;
-  }
+    return `${from(tableName, select(...(columns || [])))} ${where(
+      applySearch(findOptions),
+    )}`;
+  };
   const set = (data: T) =>
     `IF(EXISTS(${from(tableName, select(pkey))} WHERE [${pkey}]=@id)) ` +
     `${update(data)}` +
@@ -127,18 +135,20 @@ const queries = <T, K extends keyof T & string>(options: {
   const offset = (skip?: number | undefined) => `OFFSET ${skip || 0} ROWS`;
 
   const limit = (take?: number) =>
-    (take && take > 0) ? `FETCH NEXT ${take} ROWS ONLY` : "";
+    take && take > 0 ? `FETCH NEXT ${take} ROWS ONLY` : "";
 
   const orderby = (orderByOptions: OrderByOptions<T>) => {
     let { orderBy, orderByDesc } = orderByOptions;
     orderByDesc = typeof orderByDesc === "boolean" ? orderByDesc : true;
     return `ORDER BY [${orderBy || pkey}] ${orderByDesc ? "desc" : "asc"}`;
-  }
+  };
 
   const paged = (q: string, o: PagedOptions & OrderByOptions<T>) => {
-    let { skip, take, orderByDesc, orderBy } = o
-    return `${q} ${orderby({ orderByDesc, orderBy })} ${offset(skip)} ${limit(take)};`;
-  }
+    let { skip, take, orderByDesc, orderBy } = o;
+    return `${q} ${orderby({ orderByDesc, orderBy })} ${offset(skip)} ${limit(
+      take,
+    )};`;
+  };
 
   const optional = <P, R>(f: (p: P) => R, def?: R) => (p: P) =>
     (p && f(p)) || def;

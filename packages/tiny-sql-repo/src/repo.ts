@@ -40,9 +40,11 @@ export type RepoFty<T, K extends keyof T & string> = (options: {
   pkeyAuto?: boolean | undefined;
 }) => Repo<T, K>;
 /** new */
-export type ExecFindOptions<T> = FindOptions<T> & OrderByOptions<T> & PagedOptions & {
-  params?: {}
-}
+export type ExecFindOptions<T> = FindOptions<T> &
+  OrderByOptions<T> &
+  PagedOptions & {
+    params?: {};
+  };
 /** */
 export const tinyRepo = <T, K extends keyof T & string>(options: {
   tableName: string;
@@ -75,12 +77,30 @@ export const tinyRepo = <T, K extends keyof T & string>(options: {
     execSql<Identity>(set(data), { ...data, id: data[pkey] });
 
   const execFind = (execFindOptions: ExecFindOptions<T>) => {
-    const { filter, columns, searchText, searchColumns, take, skip, orderBy, orderByDesc, params } = execFindOptions;
+    const {
+      filter,
+      columns,
+      searchText,
+      searchColumns,
+      take,
+      skip,
+      orderBy,
+      orderByDesc,
+      params,
+    } = execFindOptions;
     return pipe(
-      execSql<T>(paged(find({ filter, columns, searchText, searchColumns }), { take, skip, orderBy, orderByDesc }), params),
+      execSql<T>(
+        paged(find({ filter, columns, searchText, searchColumns }), {
+          take,
+          skip,
+          orderBy,
+          orderByDesc,
+        }),
+        params,
+      ),
       then(values),
     );
-  }
+  };
 
   const execUpdate = (data: Partial<T> & Identity) =>
     execSql<T>(update(data), { ...data, id: data[pkey] });
@@ -116,4 +136,3 @@ export const tinyRepo = <T, K extends keyof T & string>(options: {
     exists: execExists,
   };
 };
-
