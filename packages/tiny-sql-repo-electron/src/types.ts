@@ -1,6 +1,6 @@
 import { RepoActionType, ExecFindOptions } from "@d10221/tiny-sql-repo";
 
-export { RepoActionType }
+export { RepoActionType };
 
 export const CHANNEL = "@tiny-sql-repo-action";
 

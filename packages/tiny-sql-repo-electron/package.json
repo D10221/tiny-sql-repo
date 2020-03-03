@@ -17,7 +17,8 @@
     "test": "jest",
     "prepack": "yarn build && yarn test && yarn pretty",
     "release": "release-it --no-npm",
-    "pretty": "prettier src**/*.*  test/**/* *.json *.js *.md --write"
+    "pretty": "prettier src**/*.*  test/**/* *.json *.js *.md --write",
+    "publish:it": "npm publish"
   },
   "devDependencies": {
     "@jest-runner/electron": "^2.0.3",
