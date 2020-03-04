@@ -1,0 +1,17 @@
+{
+  "name": "tiny-sql-repo-electron-demo-ts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Mr D.",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm build -rf && tsc -p . && webpack --mode=development",
+    "start": "electron --inspect ."
+  },
+  "devDependencies": {
+    "ts-loader": "6.2.1",
+    "webpack": "4.41.5",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "3.10.3"
+  }
+}

@@ -1,8 +1,8 @@
 import { json, Router } from "express";
-import ActionHandler, { Connect } from "./action-handler";
+import { actionHandler, Connect } from "./action-handler";
 import { tinyRepo } from "@d10221/tiny-sql-repo";
 /** */
-const router = (
+export const router = (
   tables: { tableName: string; pkey: string; pkeyAuto?: boolean }[],
   connect: Connect,
 ) => {
@@ -13,9 +13,9 @@ const router = (
     router.post(
       `/${tableName}`,
       json(),
-      ActionHandler<any, any>(repo as any, connect),
+      actionHandler<any, any>(repo as any, connect),
     );
   }
   return router;
 };
-export default router;
+

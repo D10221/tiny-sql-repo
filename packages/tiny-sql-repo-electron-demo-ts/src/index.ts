@@ -1,9 +1,9 @@
-const { app, BrowserWindow } = require("electron");
-const { join } = require("path");
-const { ipc } = require("../tiny-sql-repo-electron");
-const { connect } = require("@d10221/tiny-sql");
-const { Connection } = require("tedious");
-const table = require("./table");
+import { app, BrowserWindow } from "electron";
+import { join } from "path";
+import { ipc } from "../../tiny-sql-repo-electron";
+import { connect } from "@d10221/tiny-sql";
+import { Connection } from "tedious";
+import * as table from "./table";
 const {
   SQL_SERVER_DATA_SOURCE,
   SQL_SERVER_PASSWORD,
@@ -11,7 +11,7 @@ const {
   SQL_SERVER_USER,
 } = process.env;
 
-const getConnection = ignoredName => {
+const getConnection = (ignoredName: string) => {
   console.log("ignored: ", ignoredName);
   return connect(
     new Connection({
@@ -29,21 +29,21 @@ const getConnection = ignoredName => {
     }),
   );
 };
-const unsubscribe = [];
+const unsubscribe: Function[] = [];
+
 function dispose() {
   unsubscribe.forEach(f => f());
 }
 const tablename = "tiny-sql-repo-electron-table-one";
 
 async function onReady() {
-  const connection = await getConnection();
+  const connection = await getConnection("ignoreme");
   await table.create(tablename)(connection);
   await table.fill(tablename)(connection);
 
   unsubscribe.push(ipc(getConnection));
 
   const win = new BrowserWindow({
-    fullscreen: true,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -54,7 +54,7 @@ async function onReady() {
   function onWindowClosed() {}
   win.on("close", onWindowClosed);
   win.on("ready-to-show", onReadyToShow);
-  win.loadFile(join(__dirname, "index.html"));
+  win.loadFile(join(__dirname, "..", "index.html"));
   win.webContents.openDevTools();
 }
 

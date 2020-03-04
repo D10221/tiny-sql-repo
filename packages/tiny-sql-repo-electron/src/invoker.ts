@@ -1,6 +1,6 @@
-import { invoke } from "./invoke";
+import { invoke } from "./invoke.js";
 import { ExecFindOptions } from "@d10221/tiny-sql-repo";
-import { rejectNullOrUndefined } from "./rejectNullOrUndefined";
+import { rejectNullOrUndefined } from "./rejectNullOrUndefined.js";
 
 export type Invoker<T, K extends keyof T & string> = {
   pkey: K;

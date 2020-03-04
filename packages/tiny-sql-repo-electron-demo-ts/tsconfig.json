@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./build",
+    "skipLibCheck": true,
+    "jsx": "react"
+  },
+  "exclude": [
+    "src/window.ts"
+  ],
+  "include": [
+    "src"
+  ],
+}

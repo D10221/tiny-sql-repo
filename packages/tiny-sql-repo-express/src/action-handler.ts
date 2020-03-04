@@ -54,7 +54,7 @@ export type Connect = (
   meta: {},
 ) => Connection | Promise<Connection>;
 
-const actionHandler = <T, K extends keyof T & string>(
+export const actionHandler = <T, K extends keyof T & string>(
   repo: Repo<T, K>,
   connect: Connect,
 ): RequestHandler => {
@@ -71,4 +71,3 @@ const actionHandler = <T, K extends keyof T & string>(
     }
   };
 };
-export default actionHandler;

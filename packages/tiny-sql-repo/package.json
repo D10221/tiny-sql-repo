@@ -1,18 +1,16 @@
 {
   "name": "@d10221/tiny-sql-repo",
   "version": "0.1.0-alpha.5",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esnext/index.js",
-  "types": "dist/esnext/index.d.ts",
+  "main": "index.js",
+  "module": "main.js",
+  "types": "index.d.ts",
   "src": "src/index.ts",
   "author": "d10221@protonmail.com",
   "repository": "https://github.com/D10221/tiny-sql-repo.git",
   "homepage": "https://github.com/D10221/tiny-sql-repo",
   "license": "MIT",
   "scripts": {
-    "build:cjs": "rimraf dist/cjs && tsc -p ./tsconfig.json",
-    "build:esnext": "rimraf dist/esnext && tsc -p ./tsconfig.esnext.json",
-    "build": "rimraf dist && yarn build:cjs && yarn build:esnext",
+    "build": "rimraf dist && tsc -p .",
     "watch": "rimraf dist && tsc -p . --watch",
     "test": "jest",
     "prepack": "yarn build && yarn test && yarn pretty",
@@ -34,7 +32,8 @@
     "typescript": "3.7.5"
   },
   "dependencies": {
-    "@d10221/tiny-sql": "1.0.0-beta.31"
+    "@d10221/tiny-sql": "1.0.0-beta.31",
+    "esm": "^3.2.25"
   },
   "peerDependencies": {
     "tedious": "8.0.1"
