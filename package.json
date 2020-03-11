@@ -1,6 +1,13 @@
 {   
   "private": true,
   "workspaces": [
-    "packages/*"
-  ]
+    "packages/tiny-sql-repo",
+    "packages/tiny-sql-repo-electron",
+    "packages/tiny-sql-electron-demo",
+    "packages/tiny-sql-express"
+  ],
+  "scripts": {
+    "build": "yarn workspaces run build",
+    "test": "yarn workspaces run test"
+  }
 }

@@ -18,7 +18,7 @@ function $keys<X>(x: X) {
   return Object.keys(x) as (keyof X)[];
 }
 
-const queries = <T, K extends keyof T & string>(options: {
+export const queries = <T, K extends keyof T & string>(options: {
   tableName: string;
   pkey: K;
   pkeyAuto?: boolean;
@@ -167,4 +167,3 @@ const queries = <T, K extends keyof T & string>(options: {
   });
 };
 
-export default queries;
