@@ -3,7 +3,7 @@ import { execSql, connect } from "@d10221/tiny-sql";
 import { Connection } from "tedious";
 import { randomBytes } from "crypto";
 
-const randomString = (length = 16, enc = "hex") =>
+const randomString = (length = 16, enc:BufferEncoding = "hex") =>
   randomBytes(length).toString(enc);
 
 type TestTable = {
